@@ -7,8 +7,8 @@ function App() {
   const [totalR, setTotalR] = useState('00')
   const [totalP, setTotalP] = useState('00')
   const [showArr ,setShowArr] =useState([])
-
-    let amt = null;
+  let [payAmount , setPayAmount] =useState({val: ''})
+    // let amt = null;
   const handleChange = (event) => {
     const { name, value } = event.target;
     setUserData((prevFormData) => ({ ...prevFormData, [name]: value }));
@@ -29,7 +29,7 @@ function App() {
   function pay(e) {
     const { name, id } = e.target
     if (name == "pay") {
-       if(amt == null){
+       if(payAmount == ''){
         alert('enter amount')
         return
        }
@@ -37,11 +37,10 @@ function App() {
       // setUserList(users =>users.map((user, idx)=> idx == id ?  {...user, userAmount: Number(user.userAmount) - Number(amt)}: user))
      const newUserList = userList.map((user ,idx)=>{
           if(idx == id){
-            if (user.userAmount >= amt) {
-              setTotalP(prev => prev - amt)
-              return {...user, userAmount: Number(user.userAmount) - Number(amt)}            
+            if (user.userAmount >= payAmount) {
+              setTotalP(prev => prev - payAmount)
+              return {...user, userAmount: Number(user.userAmount) - Number(payAmount)}            
             }else{
-              console.log(user.userAmount, amt)
               alert("Enter Correct amount")
             }
           }
@@ -53,9 +52,6 @@ function App() {
       alert("Remind to " + remind[0].userName)
     }
   }
-  function payValue(e){
-      amt  = e.target.value
-    }
     function addInput(e){
       const id = e.target.id
       setShowArr(prev => [...prev , id])
@@ -106,7 +102,10 @@ function App() {
                   </> 
                   : <>
                   {
-                    showArr.includes(String(i)) ? <input type="number" placeholder="Enter Amount" onChange={payValue} className="outline-none border-2 border-gray-800 rounded-md px-3" /> : <span className="cursor-pointer" onClick={addInput} id={i}>{"👈"}</span>
+                    showArr.includes(String(i)) ? <input type="number" placeholder="Enter Amount" value={payAmount.val} onChange={(e)=>{
+                      setPayAmount({val:e.target.value})
+                      e.target.focus()
+                    }} className="outline-none border-2 border-gray-800 rounded-md px-3" /> : <span className="cursor-pointer" onClick={addInput} id={i}>{"👈"}</span>
                   }
                   <button className=" border-emerald-300 border-2 px-6 mx-4 text-lg cursor-pointer" id={i} name={val.option == "receive" ? "receive" : "pay"} onClick={pay}>Pay</button>
                   </>
