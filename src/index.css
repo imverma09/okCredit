@@ -1,25 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-*{
-   
+.userSection{
+    border: 2px solid black ;
+    width: 50%;
+    margin: auto;
+    padding: 10px;
 }
-.popup{
+.userList{
+    border: 2px solid black;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50% , -50%);
-    border: 2px solid black;
-    padding: 40px 20px  ;
-    background-color: rgba(128, 128, 128, 0.832);
-    box-shadow: 2px 2px 12px black;
-    text-align: center;
-}
-.check-box input{
-    margin: 10px;
-}
-#delete{
-    position: absolute;;
-    right: 10px;
-    top: 6px;
+    height:90vh ;
+    width: 30%;
+    padding: 10px;
 }

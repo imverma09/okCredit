@@ -1,122 +1,62 @@
-import { useState } from "react"
+import React from 'react'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 function App() {
-  const [newChat, setNewChat] = useState(false)
-  const [userList, setUserList] = useState([])
-  const [userData, setUserData] = useState({ userName: "", userAmount: "", option: "receive" })
-  const [totalR, setTotalR] = useState('00')
-  const [totalP, setTotalP] = useState('00')
-  const [showArr ,setShowArr] =useState([])
-  let [payAmount , setPayAmount] =useState({val: ''})
-    // let amt = null;
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setUserData((prevFormData) => ({ ...prevFormData, [name]: value }));
-  };
-  function formHandle(e) {
-    e.preventDefault()
-    setNewChat(false)
-    setUserList(prev => [...prev, userData])
-    if(userData.option == "receive"){
-      setTotalR(prev => Number(prev) + Number(userData.userAmount))
-    } 
-    if(userData.option == "pending"){
-      setTotalP(prev => Number(prev) + Number(userData.userAmount) )
-    } 
-    setUserData({ userName: "", userAmount: "", option: "receive" })
+  const [addPerson, setAddPerson] = useState("")
+  const [userList , setUserList] =useState([
+    {
+      userName : "Robert",
+      totalAmount : 0
+    },
+    {
+      userName : "John Wick",
+      totalAmount : 120
+    },
+    {
+      userName : "Daniel",
+      totalAmount : 140
+    },
+  ])
+  function userHandle(){ 
+    setUserList([...userList  , { userName :  addPerson , totalAmount : 0}])
+    setAddPerson('')
   }
-
-  function pay(e) {
-    const { name, id } = e.target
-    if (name == "pay") {
-       if(payAmount == ''){
-        alert('enter amount')
-        return
-       }
-      setShowArr(prev => prev.filter(val => val !=id ))
-      // setUserList(users =>users.map((user, idx)=> idx == id ?  {...user, userAmount: Number(user.userAmount) - Number(amt)}: user))
-     const newUserList = userList.map((user ,idx)=>{
-          if(idx == id){
-            if (user.userAmount >= payAmount) {
-              setTotalP(prev => prev - payAmount)
-              return {...user, userAmount: Number(user.userAmount) - Number(payAmount)}            
-            }else{
-              alert("Enter Correct amount")
-            }
-          }
-          return user
-      })
-      setUserList(newUserList)
-    } else {
-      const remind = userList.filter((val, i) => i == id)
-      alert("Remind to " + remind[0].userName)
-    }
-  }
-    function addInput(e){
-      const id = e.target.id
-      setShowArr(prev => [...prev , id])
-  }
-
   return (
-    <>
-      <section className="container ">
-        <nav className="border-2 px-12 flex justify-around">
+    <div>
+       <nav className="border-2 px-12 flex justify-between">
           <div>
             <span className=" border-emerald-300 border-2 px-12 mx-4 text-lg cursor-pointer">Receive</span>
-            <span className=" border-emerald-300 border-2 px-12 "><strong>{totalR}</strong></span>
+            <span className=" border-emerald-300 border-2 px-12 "><strong>00</strong></span>
           </div>
           <div>
             <span className=" border-emerald-300 border-2 px-12 text-lg">Pending</span>
-            <span className=" border-emerald-300 border-2 px-12 mx-4"><strong>{totalP}</strong></span>
+            <span className=" border-emerald-300 border-2 px-12 mx-4"><strong>00</strong></span>
           </div>
         </nav>
-        <button className="border-solid border-cyan-600 border-2 px-3 bg-slate-300 " onClick={() => setNewChat(true)}>New Chat</button>
-        {
-          newChat && <div className="popup rounded-md">
-            <button className="bg-red-500 px-1 rounded-md" id="delete" onClick={() => { setNewChat(false) }}>X</button>
-            <form action="" className="flex flex-col gap-4" onSubmit={formHandle}>
-              <input type="text" required placeholder="Enter Name" value={userData.userName} className="outline-none border-2 border-gray-800 rounded-md px-3" name="userName" onChange={handleChange} />
-              <input type="number" required placeholder="Enter Amount" name="userAmount" value={userData.userAmount} className="outline-none border-2 border-gray-800 rounded-md px-3" onChange={handleChange} />
-              <div className="check-box">
-                <label htmlFor="receive">Receive</label>
-                <input type="radio" name="option" id="receive" value={"receive"} checked={userData.option === "receive"} onChange={handleChange} />
-                <label htmlFor="pending">Pending</label>
-                <input type="radio" name="option" id="pending" value={"pending"} checked={userData.option === "pending"} onChange={handleChange} />
-              </div>
-              <button className="border-solid border-cyan-600 border-2 px-3 bg-slate-300">Add</button>
-            </form>
+       <nav className=" px-12 flex justify-between mt-5">
+          <div>
+            <input type="text" className='border-2 border-solid border-emerald-300 px-1' placeholder='Enter Name' value={addPerson} onChange={(e)=> setAddPerson(e.target.value)}  />
+            <button className='border-emerald-300 border-2 px-12 ml-2' onClick={userHandle}>Add</button>
           </div>
+          <div>
+          <input type="text" className='border-2 border-solid border-emerald-300 px-1' placeholder='Enter Name to Search' />
+          <button className='border-emerald-300 border-2 px-12 ml-2'>Search</button>
+          </div>
+        </nav>
+     <section className='userSection'>
+        {
+          userList.map(({userName , totalAmount})=>
+           <Link to={`/${userName}`}>
+             <div key={Math.random()} className='border-2 border-emerald-300 flex justify-between mt-5 px-2 py-2'>
+                    <p className='text-xl'>{userName}</p>
+                    <p className='text-xl'>{totalAmount}</p>
+                  </div>
+           </Link>
+          )
         }
-        <main>
-          {
-            userList.map((val, i) =>
-              <div key={Math.random()} className="bg-gray-100 m-3 flex p-4 justify-between gap-0 ">
-                <div>
-                  <p>{val.userName} </p>
-                  <p> ₹ {val.userAmount} </p>
-                </div>
-               <div>
-                {
-                  val.option == 'receive'?<>
-                   <button className=" border-emerald-300 border-2 px-6 mx-4 text-lg cursor-pointer" id={i} name={val.option == "receive" ? "receive" : "pay"} onClick={pay}>Receive</button>
-                  </> 
-                  : <>
-                  {
-                    showArr.includes(String(i)) ? <input type="number" placeholder="Enter Amount" value={payAmount.val} onChange={(e)=>{
-                      setPayAmount({val:e.target.value})
-                      e.target.focus()
-                    }} className="outline-none border-2 border-gray-800 rounded-md px-3" /> : <span className="cursor-pointer" onClick={addInput} id={i}>{"👈"}</span>
-                  }
-                  <button className=" border-emerald-300 border-2 px-6 mx-4 text-lg cursor-pointer" id={i} name={val.option == "receive" ? "receive" : "pay"} onClick={pay}>Pay</button>
-                  </>
-                }
-               </div>
-              </div>
-            )
-          }
-        </main>
-      </section>
-    </>
+    </section>
+    </div>
   )
 }
 
