@@ -1,23 +1,9 @@
 import React from 'react'
-import { useState } from 'react'
+import {useContext } from 'react'
 import { Link } from 'react-router-dom'
-
+import { contextProvider } from './components/context/UserContextProvider'
 function App() {
-  const [addPerson, setAddPerson] = useState("")
-  const [userList , setUserList] =useState([
-    {
-      userName : "Robert",
-      totalAmount : 0
-    },
-    {
-      userName : "John Wick",
-      totalAmount : 120
-    },
-    {
-      userName : "Daniel",
-      totalAmount : 140
-    },
-  ])
+  const {userList , setUserList , addPerson ,setAddPerson}  = useContext(contextProvider)
   function userHandle(){ 
     setUserList([...userList  , { userName :  addPerson , totalAmount : 0}])
     setAddPerson('')
@@ -47,8 +33,8 @@ function App() {
      <section className='userSection'>
         {
           userList.map(({userName , totalAmount})=>
-           <Link to={`/${userName}`}>
-             <div key={Math.random()} className='border-2 border-emerald-300 flex justify-between mt-5 px-2 py-2'>
+           <Link to={`/${userName}`} key={Math.random()}>
+             <div className='border-2 border-emerald-300 flex justify-between mt-5 px-2 py-2'>
                     <p className='text-xl'>{userName}</p>
                     <p className='text-xl'>{totalAmount}</p>
                   </div>
