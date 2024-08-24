@@ -4,8 +4,8 @@ function UserContextProvider({children}) {
     const [addPerson, setAddPerson] = useState("")
     const [userList , setUserList] =useState([
         {
-          userName : "Robert",
-          totalAmount : 0
+          userName : "Harsh",
+          totalAmount : 200
         },
         {
           userName : "John Wick",
