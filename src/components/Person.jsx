@@ -29,6 +29,7 @@ function Person() {
           )
         }
       </div>
+      <section className='section'>
       {
         amountList.map(({ amount, type, time }) =>
           <div className={type == 'given' ? "list justify-end" : "list justify-start"}>
@@ -39,6 +40,7 @@ function Person() {
           </div>
         )
       }
+      </section>
       <div className='absolute bottom-0 w-full  bg-gray-50 '>
         <input type="number" placeholder='Enter Amount' className='w-3/4 block p-2 mx-auto my-2 border-2 border-gray' value={amount} onChange={e => setAmount(e.target.value)} />
         <div className='w-full border-2 border-white'></div>

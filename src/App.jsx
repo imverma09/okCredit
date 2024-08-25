@@ -5,15 +5,16 @@ import { contextProvider } from './components/context/UserContextProvider'
 function App() {
   const {userList , setUserList , addPerson ,setAddPerson}  = useContext(contextProvider)
   const [searchValue , setSearchValue] = useState('')
+  const [showData ,setShowData] = useState(userList)
   function userHandle(){ 
      if (addPerson.trim() == '') {
       alert(" Enter Name ")
-       return
+       return ;
      }
      const exists = userList.some(val => val.userName.toLowerCase() == addPerson.toLowerCase())
      if(exists){
       alert("User Name All Ready Exists")
-      return
+      return ;
      }
     setUserList([...userList  , { userName :  addPerson , totalAmount : 0}])
     setAddPerson('')
@@ -22,14 +23,13 @@ function App() {
     const filterData =  userList.filter(val=> val.userName.toLowerCase() == searchValue.toLowerCase())
     if(filterData.length == 0){
       alert("no user Found")
-      return
+      return ;
     }
-    setUserList(filterData)
+    setShowData(filterData)
     setSearchValue("")
   }
-  function clearData(){
-   
-  }
+
+
 
   return (
     <div>
@@ -52,13 +52,13 @@ function App() {
           <input type="text" className='border-2 border-solid border-gray-300 px-1' placeholder='Enter Name to Search' value={searchValue} onChange={(e)=>setSearchValue(e.target.value)} />
           <button className='border-gray-50 bg-gray-50 border-2 px-12 ml-2' onClick={searchHandle}>Search</button>
           {
-            <button className='border-gray-50 bg-gray-50 border-2 px-6 ml-2' onClick={clearData}>X</button>
+            <button className='border-gray-50 bg-gray-50 border-2 px-6 ml-2' onClick={()=> setShowData(userList)}>X</button>
           }
           </div>
         </nav>
      <section className='userSection'>
         {
-          userList.map(({userName , totalAmount})=>
+          showData.map(({userName , totalAmount})=>
            <Link to={`/${userName}`} key={Math.random()}>
              <div className='border-2 border-gray-100 flex justify-between mt-5 px-2 py-2 bg-gray-50'>
                     <p className='text-xl'>{userName}</p>
