@@ -5,15 +5,15 @@ function UserContextProvider({children}) {
     const [userList , setUserList] =useState([
         {
           userName : "Harsh",
-          totalAmount : 200
+          totalAmount : 0
         },
         {
           userName : "John Wick",
-          totalAmount : 120
+          totalAmount : 0
         },
         {
           userName : "Daniel",
-          totalAmount : 140
+          totalAmount : 0
         },
       ])
   return (
