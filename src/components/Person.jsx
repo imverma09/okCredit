@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { contextProvider } from './context/UserContextProvider'
 function Person() {
   const params = useParams()
-  const { userList } = useContext(contextProvider)
+  const { userList, setUserList } = useContext(contextProvider)
   const { name } = params
   const [amount, setAmount] = useState("")
   const [filterUser, setFilterUser] = useState(userList.filter((user) => user.userName == name))
@@ -31,6 +31,7 @@ function Person() {
       
     }
     setAmountList([...amountList, { type: id, amount, time }])
+    setUserList(l => l.map(val => val.userName.toLowerCase() == name.toLowerCase() ? {...val, totalAmount: Number(amount)}: val))
     setAmount('')
   }
   return (
