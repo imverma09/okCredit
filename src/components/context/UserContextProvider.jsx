@@ -16,8 +16,10 @@ function UserContextProvider({children}) {
           totalAmount : 0
         },
       ])
+
+      const [showData, setShowData] = useState(userList)
   return (
- <contextProvider.Provider value={{addPerson , setAddPerson , userList ,setUserList}}>
+ <contextProvider.Provider value={{addPerson , setAddPerson , userList ,setUserList ,showData , setShowData}}>
     {children}
  </contextProvider.Provider>
   )
