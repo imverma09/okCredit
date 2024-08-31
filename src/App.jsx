@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { contextProvider } from './components/context/UserContextProvider'
 function App() {
 
-  const { userList , setUserList, addPerson, setAddPerson} = useContext(contextProvider)
+  const { userList, setUserList, addPerson, setAddPerson } = useContext(contextProvider)
   const [searchValue, setSearchValue] = useState('')
   function userHandle() {
     if (addPerson.trim() == '') {
@@ -20,17 +20,12 @@ function App() {
     setAddPerson('')
   }
 
-  function searchHandle(e) {
+  // SEARCH FUNCTION 
+  useEffect(() => {
+    const data = searchValue.length === 0 ? userList : userList.filter(user => user.userName.toLowerCase().includes(searchValue.toLowerCase()))
+    setUserList(data)
+  }, [searchValue])
 
-    // const filterData = userList.filter(val => val.userName.toLowerCase().indexOf(searchValue.toLowerCase()) != -1)
-    // console.log(filterData)
-    // if (filterData.length == 0) {
-    //   alert("no user Found")
-    //   return;
-    // }
-    // setUserList(filterData)
-
-  }
   return (
     <div>
       <nav className="border-2 py-3 px-12 flex justify-between">
@@ -49,8 +44,8 @@ function App() {
           <button className='border-gray-50 border-2 bg-gray-50 px-12 ml-2' onClick={userHandle}>Add</button>
         </div>
         <div>
-          <input type="text" className='border-2 border-solid border-gray-300 px-1' placeholder='Enter Name to Search' value={searchValue} onChange={searchHandle} />
-          <button className='border-gray-50 bg-gray-50 border-2 px-12 ml-2' onClick={searchHandle}>Search</button>
+          <input type="text" className='border-2 border-solid border-gray-300 px-1' placeholder='Enter Name to Search' value={searchValue} onChange={e => setSearchValue(e.target.value)} />
+          <button className='border-gray-50 bg-gray-50 border-2 px-12 ml-2' >Search</button>
         </div>
       </nav>
       <section className='userSection'>

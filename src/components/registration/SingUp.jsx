@@ -2,9 +2,17 @@ import React, { useState } from 'react'
 import { Form, Link } from 'react-router-dom'
 function SingUp() {
   const [userData, setUserData] = useState({firstName :"",lastName :"",email : "", password : "" })
+  const [ color , setColor] = useState(true)
+  const [type , setType] = useState(true)
   function formHandle(e){
     e.preventDefault()
-   console.log(userData)
+    if (userData.password.length >= 6) {
+      console.log(userData) 
+      setUserData({firstName :"",lastName :"",email : "", password : "" })
+      setColor(true)
+    }else{
+       setColor(false)
+    }
   }
   function changeHandler(e){
      const {id , value} = e.target
@@ -20,21 +28,22 @@ function SingUp() {
               <div className="flex mb-4">
                 <div className="w-1/2 mr-1">
                   <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="firstName">First Name *</label>
-                  <input className="border rounded w-full py-2 px-3 text-grey-darker" id="firstName" type="text" value={userData.firstName} onChange={changeHandler} placeholder="Your first name"/>
+                  <input className="border rounded w-full py-2 px-3 text-grey-darker" id="firstName" type="text" required value={userData.firstName} onChange={changeHandler} placeholder="Your first name"/>
                 </div>
                 <div className="w-1/2 ml-1">
                   <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="lastName">Last Name</label>
-                  <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="lastName" type="text" value={userData.lastName} onChange={changeHandler} placeholder="Your last name"/>
+                  <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="lastName" type="text"  value={userData.lastName} onChange={changeHandler} placeholder="Your last name"/>
                 </div>
               </div>
               <div className="mb-4">
                 <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="email">Email Address *</label>
-                <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="email" type="email" value={userData.email} onChange={changeHandler} placeholder="Your email address"/>
+                <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="email" type="email" required  value={userData.email} onChange={changeHandler} placeholder="Your email address"/>
               </div>
-              <div className="mb-4">
+              <div className="mb-4 relative">
                 <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="password">Password *</label>
-                <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="password" type="password" value={userData.password} onChange={changeHandler}  placeholder="Your secure password"/>
-                  <p className="text-grey text-xs mt-1">At least 6 characters</p>
+                <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="password" type={type ? "password" : "text"} required value={userData.password} onChange={changeHandler}  placeholder="Your secure password"/>
+                <span class="material-symbols-outlined absolute right-2 bottom-7 cursor-pointer" onClick={()=>{setType(!type)}}> { type ? "visibility_off" : "visibility"}</span>
+                  <p className={color ? "text-grey text-xs mt-1":"text-grey text-xs mt-1 text-red-600"}>At least 6 characters</p>
               </div>
               <button className='border-2 px-10 py-2 bg-green-400'>Submit</button> 
             </div>
