@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { contextProvider } from './components/context/UserContextProvider'
+import { userContext } from './components/context/UserContextProvider'
+import List from './components/List'
 function App() {
-
-  const { userList, setUserList, addPerson, setAddPerson } = useContext(contextProvider)
+  const { userList, setUserList, addPerson, setAddPerson} = useContext(userContext)
   const [searchValue, setSearchValue] = useState('')
   function userHandle() {
     if (addPerson.trim() == '') {
@@ -21,11 +21,7 @@ function App() {
   }
 
   // SEARCH FUNCTION 
-  useEffect(() => {
-    const data = searchValue.length === 0 ? userList : userList.filter(user => user.userName.toLowerCase().includes(searchValue.toLowerCase()))
-    setUserList(data)
-  }, [searchValue])
-
+   const filterData = searchValue.length === 0 ?userList : userList.filter(user => user.userName.toLowerCase().includes(searchValue.toLowerCase()))
   return (
     <div>
       <nav className="border-2 py-3 px-12 flex justify-between">
@@ -48,18 +44,7 @@ function App() {
           <button className='border-gray-50 bg-gray-50 border-2 px-12 ml-2' >Search</button>
         </div>
       </nav>
-      <section className='userSection'>
-        {
-          userList.map(({ userName, totalAmount }) =>
-            <Link to={`/${userName}`} key={Math.random()}>
-              <div className='border-2 border-gray-100 flex justify-between mt-5 px-2 py-2 bg-gray-50'>
-                <p className='text-xl'>{userName}</p>
-                <p className='text-xl'>{totalAmount}</p>
-              </div>
-            </Link>
-          )
-        }
-      </section>
+       <List filterData={filterData}/>
     </div>
   )
 }

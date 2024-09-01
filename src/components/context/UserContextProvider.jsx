@@ -1,5 +1,5 @@
 import { createContext , useState} from "react";
-export const  contextProvider = createContext()
+export const  userContext = createContext()
 function UserContextProvider({children}) {
     const [addPerson, setAddPerson] = useState("")
     const [userList , setUserList] =useState([
@@ -19,9 +19,9 @@ function UserContextProvider({children}) {
 
       const [showData, setShowData] = useState(userList)
   return (
- <contextProvider.Provider value={{addPerson , setAddPerson , userList ,setUserList ,showData , setShowData}}>
+ <userContext.Provider value={{addPerson , setAddPerson , userList ,setUserList ,showData , setShowData}}>
     {children}
- </contextProvider.Provider>
+ </userContext.Provider>
   )
 }
 

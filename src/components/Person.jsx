@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { contextProvider } from './context/UserContextProvider'
+import { userContext } from './context/UserContextProvider'
 function Person() {
   const params = useParams()
-  const { userList, setUserList } = useContext(contextProvider)
+  const { userList, setUserList } = useContext(userContext)
   const { name } = params
   const [amount, setAmount] = useState("")
   const [filterUser, setFilterUser] = useState(userList.filter((user) => user.userName == name))
