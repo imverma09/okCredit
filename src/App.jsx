@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { userContext } from './components/context/UserContextProvider'
 import List from './components/List'
 function App() {
-  const { userList, setUserList, addPerson, setAddPerson} = useContext(userContext)
+  const { userList, setUserList, addPerson, setAddPerson } = useContext(userContext)
   const [searchValue, setSearchValue] = useState('')
   function userHandle() {
     if (addPerson.trim() == '') {
@@ -19,9 +19,14 @@ function App() {
     setUserList([...userList, { userName: addPerson, totalAmount: 0 }])
     setAddPerson('')
   }
-
+  useEffect(() => {
+    fetch('http://localhost:4000')
+      .then(response => response.json())
+      .then(data => setUserList(data))
+      .catch(error => console.error('Error :', error));
+  }, [])
   // SEARCH FUNCTION 
-   const filterData = searchValue.length === 0 ?userList : userList.filter(user => user.userName.toLowerCase().includes(searchValue.toLowerCase()))
+  const filterData = searchValue.length === 0 ? userList : userList.filter(user => user.userName.toLowerCase().includes(searchValue.toLowerCase()))
   return (
     <div>
       <nav className="border-2 py-3 px-12 flex justify-between">
@@ -44,7 +49,7 @@ function App() {
           <button className='border-gray-50 bg-gray-50 border-2 px-12 ml-2' >Search</button>
         </div>
       </nav>
-       <List filterData={filterData}/>
+      <List filterData={filterData} />
     </div>
   )
 }
