@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { json, Link } from 'react-router-dom'
 import { userContext } from './components/context/UserContextProvider'
 import List from './components/List'
 function App() {
@@ -16,7 +16,17 @@ function App() {
       alert("User Name All Ready Exists")
       return;
     }
-    setUserList([...userList, { userName: addPerson, totalAmount: 0 }])
+    // ADD USERLIST IN A ARRAY  
+    fetch("http://localhost:4000",{
+      method : "POST",
+      body : JSON.stringify({userName: addPerson, totalAmount: 0}),
+      headers : {
+        "content-Type": "application/json"
+      }
+    })
+    .then(res => res.json())
+    .then(data => setUserList(data))
+    .catch(err => console.log(err));
     setAddPerson('')
   }
   useEffect(() => {
