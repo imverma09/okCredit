@@ -10,7 +10,7 @@ function SingUp() {
       fetch("http://localhost:4000/registration/singUp" ,{
         method : "POST",
         body : JSON.stringify(userData),
-        headers : {
+        headers : { 
           "content-Type" : "application/json"
         }
       })
