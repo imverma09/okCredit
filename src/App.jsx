@@ -34,7 +34,7 @@ function App() {
       .then(response => response.json())
       .then(data => setUserList(data))
       .catch(error => console.error('Error :', error));
-  }, [])
+  },[])
   // SEARCH FUNCTION 
   const filterData = searchValue.length === 0 ? userList : userList.filter(user => user.userName.toLowerCase().includes(searchValue.toLowerCase()))
   return (
