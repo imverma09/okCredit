@@ -6,11 +6,26 @@ const SingIn = () => {
   function formHandle(e) {
     e.preventDefault()
     console.log(loginData)
-    setLoginData({ email: "", password: "" })
+    fetch("http://localhost:4000/registration/singIn", {
+      method : "POST",
+      body : JSON.stringify(loginData),
+      headers : {
+        "content-Type" : "application/json"
+      }
+    })
+    .then((res)=>{
+        return res.json()
+    })
+    .then((data)=>{
+      console.log(data)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+    // setLoginData({ email: "", password: "" })
   }
   function changeHandler(e) {
     const { id, value } = e.target
-    console.log(id , value)
     setLoginData({ ...loginData, [id]: value })
   }
   return (
@@ -25,7 +40,7 @@ const SingIn = () => {
                 <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="email" type="email" required value={loginData.email} onChange={changeHandler} placeholder="Your email address" />
               </div>
               <div className="mb-4">
-                <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="password">Password *</label>
+                <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="current-password">Password *</label>
                 <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="password" type="password" required value={loginData.password} onChange={changeHandler} placeholder="Your secure password" />
               </div>
               <button className='border-2 px-10 py-2 bg-green-400'>Submit</button>

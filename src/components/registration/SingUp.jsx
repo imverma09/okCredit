@@ -11,8 +11,8 @@ function SingUp() {
       fetch("http://localhost:4000/registration/singUp", {
         method: "POST",
         body: JSON.stringify(userData),
-        headers: {
-          "content-Type": "application/json"
+        headers : {
+          "content-Type" : "application/json"
         }
       })
         .then((res) => {
@@ -24,10 +24,10 @@ function SingUp() {
           }
         })
         .then(data => {
-           console.log(data)
+           alert(data.error)
         })
         .catch(err => console.log(err))
-      setUserData({ firstName: "", lastName: "", email: "", password: "" })
+      // setUserData({ firstName: "", lastName: "", email: "", password: "" })
       setColor(true)
     } else {
       setColor(false)
@@ -60,7 +60,7 @@ function SingUp() {
               </div>
               <div className="mb-4 relative">
                 <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="password">Password *</label>
-                <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="password" type={type ? "password" : "text"} required value={userData.password} onChange={changeHandler} placeholder="Your secure password" />
+                <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="password" type={type ? "password" : "text"} required value={userData.password} onChange={changeHandler} minLength={6} placeholder="Your secure password" />
                 <span className="material-symbols-outlined absolute right-2 bottom-7 cursor-pointer" onClick={() => { setType(!type) }}> {type ? "visibility_off" : "visibility"}</span>
                 <p className={color ? "text-grey text-xs mt-1" : "text-grey text-xs mt-1 text-red-600"}>At least 6 characters</p>
               </div>
