@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import Person from './components/Person.jsx'
+import Person from './components/Person/Person.jsx'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import UserContextProvider from './components/context/UserContextProvider.jsx'
@@ -13,7 +13,7 @@ const router = createBrowserRouter([
         element: <App />
     },
     {
-        path: "/:name",
+        path: "/person/:name",
         element: <Person />
     },
     {

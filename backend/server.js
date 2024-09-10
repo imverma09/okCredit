@@ -31,6 +31,7 @@ app.post("/", (req, res) => {
 })
 
 app.get("/", (req, res) => {
+  console.log('object')
   res.status(200).json(data)
 })
 
@@ -60,4 +61,11 @@ app.post("/registration/singIn", (req, res) => {
 const port = 4000
 app.listen(port, () => {
   console.log("Server Start port no is " + port)
+})
+
+// person file data handle
+
+app.get("/person/:num" , (req ,res)=>{
+      console.log(req.params.num)
+      console.log("hello")
 })

@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { userContext } from './context/UserContextProvider'
+import { userContext } from '../context/UserContextProvider'
 function Person() {
   const params = useParams()
   const { userList, setUserList } = useContext(userContext)
@@ -11,27 +11,34 @@ function Person() {
   const day = new Date()
   const time = day.toLocaleTimeString("en-US")
 
+
+  useEffect(()=>{
+      fetch("http://localhost:4000/person/")
+      .then(res => res.json())
+      .then(data => console.log(data))
+  }, [])
+  
+
   function amountHandler(e) {
-   
     if (amount == '') {
       alert("Enter Amount")
       return
     }
-    let id =   e.target.id
-    if (id =="receive") {
-      const d =   filterUser.map((val)=>{
-        return {...val , totalAmount : val.totalAmount - Number(amount)}
+    let id = e.target.id
+    if (id == "receive") {
+      const d = filterUser.map((val) => {
+        return { ...val, totalAmount: val.totalAmount - Number(amount) }
       })
       setFilterUser(d)
-    }else if(id =="given") {
-      const d =   filterUser.map((val)=>{
-        return {...val , totalAmount : val.totalAmount + Number(amount)}
+    } else if (id == "given") {
+      const d = filterUser.map((val) => {
+        return { ...val, totalAmount: val.totalAmount + Number(amount) }
       })
       setFilterUser(d)
-      
+
     }
     setAmountList([...amountList, { type: id, amount, time }])
-    setUserList(l => l.map(val => val.userName.toLowerCase() == name.toLowerCase() ? {...val, totalAmount: Number(amount)}: val))
+    setUserList(l => l.map(val => val.userName.toLowerCase() == name.toLowerCase() ? { ...val, totalAmount: Number(amount) } : val))
     setAmount('')
   }
   return (
@@ -51,16 +58,16 @@ function Person() {
         }
       </div>
       <section className='section'>
-      {
-        amountList.map(({ amount, type, time }) =>
-          <div className={type == 'given' ? "list justify-end" : "list justify-start"} key={Math.random()} >
-            <div className="amount-box" >
-              <p className={type == 'given' ? "text-[20px] text-red-600" : " text-[20px] text-green-500"}> ₹ {amount}</p>
-              <span className='text-sm text text-gray-500'> {time}</span>
+        {
+          amountList.map(({ amount, type, time }) =>
+            <div className={type == 'given' ? "list justify-end" : "list justify-start"} key={Math.random()} >
+              <div className="amount-box" >
+                <p className={type == 'given' ? "text-[20px] text-red-600" : " text-[20px] text-green-500"}> ₹ {amount}</p>
+                <span className='text-sm text text-gray-500'> {time}</span>
+              </div>
             </div>
-          </div>
-        )
-      }
+          )
+        }
       </section>
       <div className='absolute bottom-0 w-full  bg-gray-50 '>
         <input type="number" placeholder='Enter Amount' className='w-3/4 block p-2 mx-auto my-2 border-2 border-gray' value={amount} onChange={e => setAmount(e.target.value)} />

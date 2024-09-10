@@ -29,6 +29,7 @@ function App() {
     .catch(err => console.log(err));
     setAddPerson('')
   }
+  
   useEffect(() => {
     fetch('http://localhost:4000')
       .then(response => response.json())

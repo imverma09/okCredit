@@ -5,7 +5,6 @@ const SingIn = () => {
   const [loginData, setLoginData] = useState({ email: "", password: "" })
   function formHandle(e) {
     e.preventDefault()
-    console.log(loginData)
     fetch("http://localhost:4000/registration/singIn", {
       method : "POST",
       body : JSON.stringify(loginData),
