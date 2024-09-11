@@ -1,21 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { json, Link, useParams } from 'react-router-dom'
 import { userContext } from '../context/UserContextProvider'
 function Person() {
   const params = useParams()
   const { userList, setUserList } = useContext(userContext)
   const { name } = params
   const [amount, setAmount] = useState("")
-  const [filterUser, setFilterUser] = useState(userList.filter((user) => user.userName == name))
+  const [filterUser, setFilterUser] = useState([])
   const [amountList, setAmountList] = useState([])
   const day = new Date()
   const time = day.toLocaleTimeString("en-US")
-
-
   useEffect(()=>{
-      fetch("http://localhost:4000/person/")
+      fetch("http://localhost:4000/person/"+ name)
       .then(res => res.json())
-      .then(data => console.log(data))
+      .then(data => setFilterUser(data))
   }, [])
   
 
@@ -35,9 +33,18 @@ function Person() {
         return { ...val, totalAmount: val.totalAmount + Number(amount) }
       })
       setFilterUser(d)
-
     }
-    setAmountList([...amountList, { type: id, amount, time }])
+
+     fetch("http://localhost:4000/person/"+name,{
+      method : "POST",
+      body : JSON.stringify({ type: id, amount, time }),
+      headers : {
+        "content-Type" : "application/json"
+      }
+     })
+     .then(res => res.json())
+     .then(data => setAmountList(data))
+     
     setUserList(l => l.map(val => val.userName.toLowerCase() == name.toLowerCase() ? { ...val, totalAmount: Number(amount) } : val))
     setAmount('')
   }

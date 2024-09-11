@@ -17,6 +17,9 @@ const data = [
   },
 ]
 const userData = []
+const amountList = [
+ 
+]
 app.use(
   cors({
     origin: "*",
@@ -31,11 +34,9 @@ app.post("/", (req, res) => {
 })
 
 app.get("/", (req, res) => {
-  console.log('object')
   res.status(200).json(data)
 })
 
-console.log(userData)
 app.post("/registration/singUp", (req, res) => {
   const val = req.body;
   const exists = userData.some(user => user.email.toLowerCase() == val.email.toLowerCase())
@@ -66,6 +67,23 @@ app.listen(port, () => {
 // person file data handle
 
 app.get("/person/:num" , (req ,res)=>{
-      console.log(req.params.num)
-      console.log("hello")
+     const name = req.params.num
+     const filterName  =  data.filter((user) => user.userName == name)
+     if (filterName.length >= 0) {
+       res.status(202).json(filterName)
+      }
+      res.status(404).json({error : "user not found"})
+})
+
+app.post("/person/:num" ,(req,res)=>{
+      const  name = req.params.num
+      const data = req.body
+      amountList.forEach((list)=>{
+          if (list.name==name) {
+            amountList.push({name , transaction : [{...data}]})
+          }
+        })
+        amountList.push({name , transaction : [{...data}]})
+      console.log(amountList[0].transaction)
+      // res.status(202).json(amountList)
 })
