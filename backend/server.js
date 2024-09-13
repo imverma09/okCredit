@@ -16,10 +16,8 @@ const data = [
     totalAmount: 0
   },
 ]
-const userData = []
-const amountList = [
- 
-]
+const userData = [] // this arr use for login page ;
+let amountList = []
 app.use(
   cors({
     origin: "*",
@@ -46,6 +44,7 @@ app.post("/registration/singUp", (req, res) => {
   res.status(202).json({ messages: "wellCome" })
   userData.push(val)
 })
+
 app.post("/registration/singIn", (req, res) => {
   const val = req.body
   const loginUser = userData.filter(u => u.email === val.email)
@@ -69,8 +68,9 @@ app.listen(port, () => {
 app.get("/person/:num" , (req ,res)=>{
      const name = req.params.num
      const filterName  =  data.filter((user) => user.userName == name)
+     const filterAmt = amountList.filter(val => val.name == name)
      if (filterName.length >= 0) {
-       res.status(202).json(filterName)
+       res.status(202).json({arr1: filterName , arr2 : filterAmt})
       }
       res.status(404).json({error : "user not found"})
 })
@@ -78,12 +78,16 @@ app.get("/person/:num" , (req ,res)=>{
 app.post("/person/:num" ,(req,res)=>{
       const  name = req.params.num
       const data = req.body
-      amountList.forEach((list)=>{
-          if (list.name==name) {
-            amountList.push({name , transaction : [{...data}]})
-          }
-        })
-        amountList.push({name , transaction : [{...data}]})
-      console.log(amountList[0].transaction)
-      // res.status(202).json(amountList)
+      let isUpdate = false
+      amountList =  amountList.map((val)=>{
+          if (val.name == name ) {
+            isUpdate =true
+            return {...val, amt  : [...val.amt , data]}
+          }return val
+      })
+      if(!isUpdate){
+        amountList.push({name ,amt : [data]})
+      }
+       const filterAmt = amountList.filter(val => val.name == name)
+      res.status(202).json(filterAmt)
 })

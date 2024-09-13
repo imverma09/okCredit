@@ -3,19 +3,22 @@ import { json, Link, useParams } from 'react-router-dom'
 import { userContext } from '../context/UserContextProvider'
 function Person() {
   const params = useParams()
-  const { userList, setUserList } = useContext(userContext)
   const { name } = params
   const [amount, setAmount] = useState("")
   const [filterUser, setFilterUser] = useState([])
   const [amountList, setAmountList] = useState([])
   const day = new Date()
   const time = day.toLocaleTimeString("en-US")
-  useEffect(()=>{
-      fetch("http://localhost:4000/person/"+ name)
+
+  useEffect(() => {
+    fetch("http://localhost:4000/person/" + name)
       .then(res => res.json())
-      .then(data => setFilterUser(data))
+      .then((data)=>{
+          setFilterUser(data.arr1)
+          setAmountList(data.arr2)
+      })
   }, [])
-  
+
 
   function amountHandler(e) {
     if (amount == '') {
@@ -35,17 +38,15 @@ function Person() {
       setFilterUser(d)
     }
 
-     fetch("http://localhost:4000/person/"+name,{
-      method : "POST",
-      body : JSON.stringify({ type: id, amount, time }),
-      headers : {
-        "content-Type" : "application/json"
+    fetch("http://localhost:4000/person/" + name, {
+      method: "POST",
+      body: JSON.stringify({ type: id, amount, time }),
+      headers: {
+        "content-Type": "application/json"
       }
-     })
-     .then(res => res.json())
-     .then(data => setAmountList(data))
-     
-    setUserList(l => l.map(val => val.userName.toLowerCase() == name.toLowerCase() ? { ...val, totalAmount: Number(amount) } : val))
+    })
+    .then(res => res.json())
+    .then(data => setAmountList(data))
     setAmount('')
   }
   return (
@@ -53,26 +54,28 @@ function Person() {
       <div className=' flex  place-items-center gap-6 bg-gray-50 p-2'>
         <Link to="/" className='text-lg'>《</Link>
         {
-          filterUser.map((val) =>
+          filterUser.map(({userName , totalAmount }) =>
             <div className='flex place-items-center justify-between w-full pr-5' key={Math.random()}>
               <div>
-                <p className='text-lg '>{val.userName}</p>
+                <p className='text-lg '>{userName}</p>
                 <span className='text-green-500'>Active Now</span>
               </div>
-              <p className='text-[20px]'> ₹ {val.totalAmount}</p>
+              <p className='text-[20px]'> ₹ {totalAmount}</p>
             </div>
           )
         }
       </div>
       <section className='section'>
         {
-          amountList.map(({ amount, type, time }) =>
-            <div className={type == 'given' ? "list justify-end" : "list justify-start"} key={Math.random()} >
-              <div className="amount-box" >
-                <p className={type == 'given' ? "text-[20px] text-red-600" : " text-[20px] text-green-500"}> ₹ {amount}</p>
-                <span className='text-sm text text-gray-500'> {time}</span>
+          amountList.map(({ name, amt }) =>
+            amt.map(({ type, amount, time }) =>
+              <div className={type == 'given' ? "list justify-end" : "list justify-start"} key={Math.random()} >
+                <div className="amount-box" >
+                  <p className={type == 'given' ? "text-[20px] text-red-600" : " text-[20px] text-green-500"}> ₹ {amount}</p>
+                  <span className='text-sm text text-gray-500'> {time}</span>
+                </div>
               </div>
-            </div>
+            )
           )
         }
       </section>
