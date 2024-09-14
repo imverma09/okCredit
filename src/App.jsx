@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
-import { json, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { userContext } from './components/context/UserContextProvider'
 import List from './components/List'
 function App() {
@@ -42,8 +42,8 @@ function App() {
     <div>
       <nav className="border-2 py-3 px-12 flex justify-between">
         <div>
-          <span className=" border-gray-50 border-2 px-12 bg-gray-50 py-1"><strong className='text-red-500'>00</strong></span>
           <span className=" border-gray-50 border-2 px-12 bg-gray-50 py-1 mx-4"><strong className='text-green-500'>00</strong></span>
+          <span className=" border-gray-50 border-2 px-12 bg-gray-50 py-1"><strong className='text-red-500'>00</strong></span>
         </div>
         <div>
           <Link to={"/registration/singUp"} className='mx-4'><span className="px-12 py-1 text-lg cursor-pointer bg-gray-50 ">Sign Up</span></Link>

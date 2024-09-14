@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useRef, useEffect, useState } from 'react'
 import { json, Link, useParams } from 'react-router-dom'
 import { userContext } from '../context/UserContextProvider'
 function Person() {
@@ -9,6 +9,7 @@ function Person() {
   const [amountList, setAmountList] = useState([])
   const day = new Date()
   const time = day.toLocaleTimeString("en-US")
+  const containerRef = useRef()
 
   useEffect(() => {
     fetch("http://localhost:4000/person/" + name)
@@ -19,6 +20,10 @@ function Person() {
       })
   }, [])
 
+  // if(containerRef.current && containerRef.current.scrollHeight) {
+  //   containerRef.current.scrollTop = containerRef.current.scrollHeight;
+  // }
+
 
   function amountHandler(e) {
     if (amount == '') {
@@ -26,18 +31,7 @@ function Person() {
       return
     }
     let id = e.target.id
-    if (id == "receive") {
-      const d = filterUser.map((val) => {
-        return { ...val, totalAmount: val.totalAmount - Number(amount) }
-      })
-      setFilterUser(d)
-    } else if (id == "given") {
-      const d = filterUser.map((val) => {
-        return { ...val, totalAmount: val.totalAmount + Number(amount) }
-      })
-      setFilterUser(d)
-    }
-
+  
     fetch("http://localhost:4000/person/" + name, {
       method: "POST",
       body: JSON.stringify({ type: id, amount, time }),
@@ -46,7 +40,11 @@ function Person() {
       }
     })
     .then(res => res.json())
-    .then(data => setAmountList(data))
+    .then(data =>{
+      setFilterUser(data.filterData)
+      setAmountList(data.filterAmt)
+    })
+    .catch((err) => { console.log(err)})
     setAmount('')
   }
   return (
@@ -60,12 +58,12 @@ function Person() {
                 <p className='text-lg '>{userName}</p>
                 <span className='text-green-500'>Active Now</span>
               </div>
-              <p className='text-[20px]'> ₹ {totalAmount}</p>
+              <p className={totalAmount < 0 ?"text-red-500 text-xl":"text-green-500 text-xl"}> ₹ {totalAmount}</p>
             </div>
           )
         }
       </div>
-      <section className='section'>
+      <section className='section' ref={containerRef}>
         {
           amountList.map(({ name, amt }) =>
             amt.map(({ type, amount, time }) =>

@@ -2,7 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const app = express()
 
-const data = [
+let data = [
   {
     userName: "Harsh",
     totalAmount: 0
@@ -58,7 +58,7 @@ app.post("/registration/singIn", (req, res) => {
     }
   }
 })
-const port = 4000
+const port = 4000 ; 
 app.listen(port, () => {
   console.log("Server Start port no is " + port)
 })
@@ -77,17 +77,29 @@ app.get("/person/:num" , (req ,res)=>{
 
 app.post("/person/:num" ,(req,res)=>{
       const  name = req.params.num
-      const data = req.body
+      const bodyData = req.body
       let isUpdate = false
+      const {type, amount}= bodyData
       amountList =  amountList.map((val)=>{
-          if (val.name == name ) {
-            isUpdate =true
-            return {...val, amt  : [...val.amt , data]}
-          }return val
+        if (val.name == name ) {
+          isUpdate =true
+          return {...val, amt  : [...val.amt , bodyData]}
+        }return val
       })
       if(!isUpdate){
-        amountList.push({name ,amt : [data]})
+        amountList.push({name ,amt : [bodyData]})
       }
-       const filterAmt = amountList.filter(val => val.name == name)
-      res.status(202).json(filterAmt)
+      data = data.map((val )=>{
+        if (val.userName == name) {
+          if (type == "receive") {
+            return{...val , totalAmount : val.totalAmount - Number(amount)}
+          }else{
+            return{...val , totalAmount : val.totalAmount + Number(amount)}
+          }
+        }
+        return val
+      })
+      const filterData = data.filter(val => val.userName == name)
+      const filterAmt = amountList.filter(val => val.name == name)
+      res.status(202).json({filterAmt  , filterData})
 })
