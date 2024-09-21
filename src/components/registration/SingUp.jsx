@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Link , useNavigate} from 'react-router-dom'
+import { loginContext } from '../context/LoginContextProvider'
 function SingUp() {
+  const {setIsLogin} = useContext(loginContext) ; 
   const [userData, setUserData] = useState({ firstName: "", lastName: "", email: "", password: "" })
   const [color, setColor] = useState(true)
   const [type, setType] = useState(true)
   const navigate =  useNavigate()
   function formHandle(e) {
+
     e.preventDefault()
     if (userData.password.length >= 6) {
       fetch("http://localhost:4000/registration/singUp", {
@@ -32,6 +35,7 @@ function SingUp() {
     } else {
       setColor(false)
     }
+    setIsLogin(true)
   }
   function changeHandler(e) {
     const { id, value } = e.target

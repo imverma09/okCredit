@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 const SingIn = () => {
+  const [type, setType] = useState(true)
   const [loginData, setLoginData] = useState({ email: "", password: "" })
   function formHandle(e) {
     e.preventDefault()
@@ -38,9 +39,10 @@ const SingIn = () => {
                 <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="email">Email Address *</label>
                 <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="email" type="email" required value={loginData.email} onChange={changeHandler} placeholder="Your email address" />
               </div>
-              <div className="mb-4">
+              <div className="mb-4 relative">
                 <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="current-password">Password *</label>
-                <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="password" type="password" required value={loginData.password} onChange={changeHandler} placeholder="Your secure password" />
+                <input className=" border rounded w-full py-2 px-3 text-grey-darker" id="password"  type={type ? "password" : "text"} required value={loginData.password} onChange={changeHandler} placeholder="Your secure password" />
+                <span className="material-symbols-outlined absolute right-2 bottom-2 cursor-pointer" onClick={() => { setType(!type) }}> {type ? "visibility_off" : "visibility"}</span>
               </div>
               <button className='border-2 px-10 py-2 bg-green-400'>Submit</button>
             </div>

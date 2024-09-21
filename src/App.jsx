@@ -3,8 +3,11 @@ import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { userContext } from './components/context/UserContextProvider'
 import List from './components/List'
+import { loginContext } from './components/context/LoginContextProvider'
 function App() {
   const { userList, setUserList, addPerson, setAddPerson } = useContext(userContext)
+  const {isLogin} = useContext(loginContext)
+  // console.log(isLogin)
   const [searchValue, setSearchValue] = useState('')
   function userHandle() {
     if (addPerson.trim() == '') {
@@ -46,8 +49,9 @@ function App() {
           <span className=" border-gray-50 border-2 px-12 bg-gray-50 py-1"><strong className='text-red-500'>00</strong></span>
         </div>
         <div>
-          <Link to={"/registration/singUp"} className='mx-4'><span className="px-12 py-1 text-lg cursor-pointer bg-gray-50 ">Sign Up</span></Link>
-          <Link to={"/registration/singIn"}><span className="px-12 py-1 text-lg cursor-pointer bg-gray-50 ">Sign In</span></Link>
+          {
+            !isLogin ? <Link to={"/registration/singUp"} className='mx-4'><span className="px-12 py-1 text-lg cursor-pointer bg-gray-50 ">Sign Up</span></Link> :   <Link to={"/registration/singIn"}><span className="px-12 py-1 text-lg cursor-pointer bg-gray-50 ">Sign In</span></Link>
+          }
         </div>
       </nav>
       <nav className=" px-12 flex justify-between mt-5">

@@ -35,7 +35,7 @@ function Person() {
     fetch("http://localhost:4000/person/" + name, {
       method: "POST",
       body: JSON.stringify({ type: id, amount, time }),
-      headers: {
+      headers : {
         "content-Type": "application/json"
       }
     })
