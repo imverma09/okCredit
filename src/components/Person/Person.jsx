@@ -20,12 +20,10 @@ function Person() {
       })
   }, [])
 
-  // if(containerRef.current && containerRef.current.scrollHeight) {
-  //   containerRef.current.scrollTop = containerRef.current.scrollHeight;
-  // }
-
-
   function amountHandler(e) {
+    if(containerRef.current && containerRef.current.scrollHeight) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
     if (amount == '') {
       alert("Enter Amount")
       return
@@ -46,6 +44,7 @@ function Person() {
     })
     .catch((err) => { console.log(err)})
     setAmount('')
+   
   }
   return (
     <main className='userList'>
@@ -77,7 +76,7 @@ function Person() {
           )
         }
       </section>
-      <div className='absolute bottom-0 w-full  bg-gray-50 '>
+      <div className='bottom-0 w-full  bg-gray-50 '>
         <input type="number" placeholder='Enter Amount' className='w-3/4 block p-2 mx-auto my-2 border-2 border-gray' value={amount} onChange={e => setAmount(e.target.value)} />
         <div className='w-full border-2 border-white'></div>
         <div className='flex justify-evenly py-3'>

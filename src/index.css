@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 .userSection{
-    /* border: 2px solid black ; */
     width: 50%;
     margin: auto;
     padding: 10px;
@@ -11,14 +10,11 @@ body{
     background-color: rgb(213, 210, 210);
 }
 .userList{
-    position: absolute;
     background-color: white;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50% , -50%);
+    margin: auto;
+    margin-top: 20px;
     height:90vh ;
     width: 30%;
-    /* text-align: center; */
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 .amount-box{
@@ -41,4 +37,12 @@ body{
 }
 .section::-webkit-scrollbar{
     display: none;
+}
+@media screen and (max-width: 900px) {
+    .userList{
+        width: 90%;
+    }
+    .userSection{
+        width: 90%;
+    }
 }

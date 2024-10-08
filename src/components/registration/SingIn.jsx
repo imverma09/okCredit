@@ -1,9 +1,12 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { Link , useNavigate } from 'react-router-dom'
+import { useState ,useContext } from 'react'
+import { loginContext } from '../context/LoginContextProvider'
 const SingIn = () => {
   const [type, setType] = useState(true)
+  const navigate =  useNavigate()
   const [loginData, setLoginData] = useState({ email: "", password: "" })
+  const { isLogin , setIsLogin}= useContext(loginContext)  
   function formHandle(e) {
     e.preventDefault()
     fetch("http://localhost:4000/registration/singIn", {
@@ -11,9 +14,13 @@ const SingIn = () => {
       body : JSON.stringify(loginData),
       headers : {
         "content-Type" : "application/json"
-      }
+      },
+      credentials :'include'
     })
     .then((res)=>{
+      if(res.ok){
+        navigate('/')
+      }
         return res.json()
     })
     .then((data)=>{
@@ -22,7 +29,8 @@ const SingIn = () => {
     .catch((err)=>{
       console.log(err)
     })
-    // setLoginData({ email: "", password: "" })
+    
+     setIsLogin(true)
   }
   function changeHandler(e) {
     const { id, value } = e.target

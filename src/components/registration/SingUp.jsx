@@ -16,7 +16,8 @@ function SingUp() {
         body: JSON.stringify(userData),
         headers : {
           "content-Type" : "application/json"
-        }
+        },
+        credentials : 'include'
       })
         .then((res) => {
           if (res.ok) {
@@ -27,10 +28,9 @@ function SingUp() {
           }
         })
         .then(data => {
-           alert(data.error)
+           console.log(data)
         })
         .catch(err => console.log(err))
-      // setUserData({ firstName: "", lastName: "", email: "", password: "" })
       setColor(true)
     } else {
       setColor(false)
