@@ -1,36 +1,35 @@
 import React, { useState, useContext } from 'react'
-import { Link , useNavigate} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { loginContext } from '../context/LoginContextProvider'
 function SingUp() {
-  const {setIsLogin} = useContext(loginContext) ; 
+  const { setIsLogin } = useContext(loginContext);
   const [userData, setUserData] = useState({ firstName: "", lastName: "", email: "", password: "" })
   const [color, setColor] = useState(true)
   const [type, setType] = useState(true)
-  const navigate =  useNavigate()
+  const navigate = useNavigate()
   function formHandle(e) {
-
     e.preventDefault()
     if (userData.password.length >= 6) {
-      fetch("http://localhost:4000/registration/singUp", {
-        method: "POST",
-        body: JSON.stringify(userData),
-        headers : {
-          "content-Type" : "application/json"
-        },
-        credentials : 'include'
-      })
-        .then((res) => {
+      async function abc() {
+        try {
+          const res = await fetch("http://localhost:4000/registration/singUp", {
+            method: "POST",
+            body: JSON.stringify(userData),
+            headers: {
+              "content-Type": "application/json"
+            },
+            credentials: 'include'
+          })
+          const data = await res.json()
           if (res.ok) {
+            localStorage.setItem('id', data._id)
             navigate("/")
           }
-          else {
-            return res.json()
-          }
-        })
-        .then(data => {
-           console.log(data)
-        })
-        .catch(err => console.log(err))
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      abc()
       setColor(true)
     } else {
       setColor(false)

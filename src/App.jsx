@@ -13,13 +13,9 @@ function App() {
       alert("Enter Name ")
       return;
     }
-    const exists = userList.some(val => val.userName.toLowerCase() == addPerson.toLowerCase())
-    if (exists) {
-      alert("User Name All Ready Exists")
-      return;
-    }
     // ADD USERLIST IN A ARRAY  
-    fetch("http://localhost:4000", {
+    const userId = localStorage.getItem('id')
+    fetch("http://localhost:4000/addPerson/"+ userId , {
       method: "POST",
       body: JSON.stringify({ userName: addPerson, totalAmount: 0 }),
       headers: {
@@ -27,17 +23,18 @@ function App() {
       }
     })
       .then(res => res.json())
-      .then(data => setUserList(data))
+      .then(data => setUserList(data.friend))
       .catch(err => console.log(err));
     setAddPerson('')
   }
 
-  // useEffect(() => {
-  //   fetch('http://localhost:4000')
-  //     .then(response => response.json())
-  //     .then(data => setUserList(data))
-  //     .catch(error => console.error('Error :', error));
-  // }, [])
+  useEffect(() => {
+    const myId =  localStorage.getItem('id')
+    fetch('http://localhost:4000/' + myId)
+      .then(response => response.json())
+      .then(data => setUserList(data.friend))
+      .catch(error => console.error('Error :', error));
+  }, [])
   // SEARCH FUNCTION 
   const filterData = searchValue.length === 0 ? userList : userList.filter(user => user.userName.toLowerCase().includes(searchValue.toLowerCase()))
   return (

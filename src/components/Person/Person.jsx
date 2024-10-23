@@ -1,5 +1,5 @@
-import React, { useContext, useRef, useEffect, useState } from 'react'
-import { json, Link, useParams } from 'react-router-dom'
+import React, { useContext, useRef, useState , useEffect } from 'react'
+import {Link, useParams } from 'react-router-dom'
 import { userContext } from '../context/UserContextProvider'
 function Person() {
   const params = useParams()
@@ -7,19 +7,20 @@ function Person() {
   const [amount, setAmount] = useState("")
   const [filterUser, setFilterUser] = useState([])
   const [amountList, setAmountList] = useState([])
-  const day = new Date()
-  const time = day.toLocaleTimeString("en-US")
+  // const day = new Date()
+  // const time = day.toLocaleTimeString("en-US")
+ useEffect(()=>{
+  const userId = localStorage.getItem('id')
+  fetch(`http://localhost:4000/person/${userId}/${name}`)
+  .then(res => res.json())
+  .then(data => {
+    setFilterUser(data.data.friend)
+    setAmountList(data.findHistory)
+  })
+  .catch(err => console.log(err))
+ },[]) 
   const containerRef = useRef()
-
-  useEffect(() => {
-    fetch("http://localhost:4000/person/" + name)
-      .then(res => res.json())
-      .then((data)=>{
-          setFilterUser(data.arr1)
-          setAmountList(data.arr2)
-      })
-  }, [])
-
+  
   function amountHandler(e) {
     if(containerRef.current && containerRef.current.scrollHeight) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
@@ -28,24 +29,27 @@ function Person() {
       alert("Enter Amount")
       return
     }
-    let id = e.target.id
-  
-    fetch("http://localhost:4000/person/" + name, {
+
+    let type = e.target.id
+    let _id = filterUser[0]._id
+    const userId = localStorage.getItem('id')
+    fetch(`http://localhost:4000/person/${userId}/${_id}/${type}`, {
       method: "POST",
-      body: JSON.stringify({ type: id, amount, time }),
+      body: JSON.stringify({amount}),
       headers : {
         "content-Type": "application/json"
       }
     })
     .then(res => res.json())
     .then(data =>{
-      setFilterUser(data.filterData)
-      setAmountList(data.filterAmt)
+      // console.log(data)
+      setFilterUser(data.frd)
+      setAmountList(data.findHistory)
     })
     .catch((err) => { console.log(err)})
     setAmount('')
-   
   }
+
   return (
     <main className='userList'>
       <div className=' flex  place-items-center gap-6 bg-gray-50 p-2'>
@@ -64,15 +68,13 @@ function Person() {
       </div>
       <section className='section' ref={containerRef}>
         {
-          amountList.map(({ name, amt }) =>
-            amt.map(({ type, amount, time }) =>
-              <div className={type == 'given' ? "list justify-end" : "list justify-start"} key={Math.random()} >
+          amountList.map(({ amount, date, _id }) =>
+              <div className={amount > 0  ? "list justify-end" : "list justify-start"} key={_id} >
                 <div className="amount-box" >
-                  <p className={type == 'given' ? "text-[20px] text-red-600" : " text-[20px] text-green-500"}> ₹ {amount}</p>
-                  <span className='text-sm text text-gray-500'> {time}</span>
+                  <p className={amount  >0 ? "text-[20px] text-red-600" : " text-[20px] text-green-500"}> ₹ {amount}</p>
+                  <span className='text-sm text text-gray-500'> {date.split('T')[0]}</span>
                 </div>
               </div>
-            )
           )
         }
       </section>

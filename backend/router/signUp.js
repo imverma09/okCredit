@@ -11,12 +11,12 @@ router.post("/singUp", async (req, res) => {
     const newPassword = await bcrypt.hash(val.password, salt)
     val.password = newPassword;
     const newUser = await users.create(val)
-    const token =  await jwt.sign({ _id : newUser._id }, secret)
+    const token = await jwt.sign({ _id: newUser._id }, secret)
     res.cookie('jwt', token, {
-      httpOnly : true,
+      httpOnly: true,
       maxAge: 60 * 60 * 1000
     })
-    return res.status(202).json({ messages: "wellCome" })
+    return res.status(202).json(newUser)
   }
   catch (error) {
     if (error.code == 11000) {
@@ -33,15 +33,15 @@ router.post("/singIn", async (req, res) => {
     if (!find) {
       return res.status(401).json({ msg: "email or password not match" })
     }
-    const exist = bcrypt.compare(find.password, val.password)
+    const exist = await bcrypt.compare(val.password, find.password)
     if (!exist) {
-      return res.status(401).json({ msg: "email or password not match" })
+      return res.status(403).json({ msg: "email or password not match" })
     }
-   const token =  await jwt.sign({_id : find._id} , secret)
-   res.cookie('jwt', token , {
-    httpOnly : true ,
-    maxAge :  60*60*1000,
-   })
+    const token = await jwt.sign({ _id: find._id }, secret)
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000,
+    })
     res.status(202).json({ msg: "welcome back " })
   }
   catch (error) {
