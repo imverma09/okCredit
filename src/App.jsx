@@ -15,7 +15,7 @@ function App() {
     }
     // ADD USERLIST IN A ARRAY  
     const userId = localStorage.getItem('id')
-    fetch("http://localhost:4000/addPerson/"+ userId , {
+    fetch("http://localhost:4000/addPerson/"+ userId,{
       method: "POST",
       body: JSON.stringify({ userName: addPerson, totalAmount: 0 }),
       headers: {
@@ -61,7 +61,11 @@ function App() {
         </div>
       </section>
       <List filterData={filterData} />
+      <div className='text-center w-0 m-auto'>
+        <Link to={'/history'} className='border-red-100 border-2 fixed bottom-0 px-1'>History</Link>
+      </div>
     </div>
+
   )
 }
 

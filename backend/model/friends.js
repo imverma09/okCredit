@@ -12,7 +12,7 @@ const subSchema = mongoose.Schema({
 })
 
 const historySchema = mongoose.Schema({
-    friendID : mongoose.Types.ObjectId,
+    frdName : mongoose.Types.ObjectId,
     amount  : Number,
     date : {
         type : Date ,

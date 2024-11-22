@@ -23,5 +23,5 @@ mongoose.connect('mongodb://localhost:27017/myBank')
   })
 })
 .catch(err =>{
-  console.log(err)
+  console.error(err)
 })

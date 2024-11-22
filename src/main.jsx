@@ -8,6 +8,7 @@ import UserContextProvider from './components/context/UserContextProvider.jsx'
 import SingUp from './components/registration/SingUp.jsx'
 import SingIn from './components/registration/SingIn.jsx'
 import LoginContextProvider from './components/context/LoginContextProvider.jsx'
+import History from './components/History.jsx'
 const router = createBrowserRouter([
     {
         path: "/",
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
     {
         path: "/registration/singIn",
         element: <SingIn />
+    },
+    {
+        path : '/history' ,
+        element : <History/>
     }
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(

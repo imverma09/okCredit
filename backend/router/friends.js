@@ -64,4 +64,19 @@ router.post('/person/:userID/:personId/:type', async (req, res) => {
     console.log(error.message)
   }
 })
+router.get('/history/:userID/:offSet/:limit', async(req,res)=>{
+    const { userID , offSet , limit}= req.params
+    // console.log(userID , offSet , limit)
+    if (!userID) {
+      res.status(400).json({message : "User not found ! "})
+    }
+    try {
+      const data =  await friend.findOne({userID},{_id : 0 , userID : 0 , friend : 0 , __v : 0 , history : {$slice : [Number(offSet) , Number(limit)]}})
+      res.status(200).json(data)
+      
+    } catch (error) {
+      console.log(error)
+    }
+
+})
 module.exports = router
